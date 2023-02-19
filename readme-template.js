@@ -10,6 +10,8 @@ ${description}
 * [Usage](#usage)
 * [Installation](#installation)
 * [Tests](#tests)
+* [Deployment](#deployment)
+* [Screenshots](#screenshots)
 * [License](#license)
 * [Contribution](#contribution)
 * [Questions](#questions)
@@ -25,6 +27,10 @@ To run tests, run the following command:
 \`\`\`
 ${tests}
 \`\`\`
+## Deployment
+${deployment}
+## Screenshots
+${screenshots}
 ## License
 The project is licensed under: ${license}.
 ## Contribution
