@@ -28,15 +28,20 @@ inquirer
         message: 'Project Title:',
     },
     {
+      type: 'list',
+      name: 'license',
+      message: 'Project License:',
+      choices: constants.githubLicenses,
+    },
+    {
+      type: 'input',
+      name: 'usage',
+      message: 'Project Usage (Separate multiple lines with semicolon):',
+    },
+    {
       type: 'input',
       name: 'description',
       message: 'Project Description:',
-    },
-    {
-        type: 'list',
-        name: 'license',
-        message: 'Project License:',
-        choices: constants.githubLicenses,
     },
     {
         type: 'checkbox',
@@ -59,18 +64,6 @@ inquirer
         type: 'input',
         name: 'tests',
         message: 'Tests (Separate multiple lines with semicolon):',
-        default: constants.notApplicable,
-      },
-      {
-        type: 'input',
-        name: 'deployment',
-        message: 'Deployment URL:',
-        default: constants.notApplicable,
-      },
-      {
-        type: 'input',
-        name: 'screenshots',
-        message: 'Screenshots <Description::ImagePath> (Separate multiple lines with semicolon):',
         default: constants.notApplicable,
       },
       {
@@ -152,59 +145,12 @@ inquirer
     //If deployment link is not N/A then sets deployment message.
     if(data.deployment !== constants.notApplicable) data.deployment = constants.deploymentMessage + data.deployment;
 
-    //Gets screenshot information.
-    if(data.screenshots !== constants.notApplicable){
-      let screenshotInfo = getScreenshotInformation(data.screenshots);
-      data.screenshots = screenshotInfo;
-    }
 
     //Sets url for GitHub using user name.
     data.gitHubUserName = `[${data.gitHubUserName}](${constants.githubLink}/${data.gitHubUserName})`;
 
     //Create README File text.
     return readmeTemplace.generateREADME(data);
-  }
-
-  //Gets screenshot information.
-  function getScreenshotInformation(screenshots){
-
-    let screenshotInfo = '';
-
-    //Gets the array of each screenshot information.
-    let screenshotArray = screenshots.split(constants.semicolonChar);
-
-    for (let i = 0; i < screenshotArray.length; i++){
-
-      let screenshot = screenshotArray[i];
-
-      //Gets the array where first element is description and second is image path.
-      let screenshotElements =  screenshot.split(constants.doubleColonChar);
-
-      //Removes less than character from description.
-      let description = screenshotElements[0].replace(constants.lessThanChar, '');
-
-      //Removes greater than character from image path.
-      let imagePath = screenshotElements[1].replace(constants.greaterThanChar, '');
-
-      //Gets relative path using assets folder name.
-      imagePath = imagePath.substring(imagePath.indexOf(constants.assetFolerName));
-
-      //Replaces back slashes with forward slashes for image path.
-      imagePath = imagePath.split(constants.filePathBackSlash).join(constants.filePathForwardSlash);
-
-      //Gets the image file name from relative image path.
-      let imageFileName = imagePath.substring(imagePath.lastIndexOf(constants.filePathForwardSlash) + 1);
-      imageFileName = imageFileName.substring(0, imageFileName.indexOf('.'));
-
-      //Adds description, image file name and image file path to create the sceenshot information.
-      if(i === screenshotArray.length -1){
-        screenshotInfo += `${description}\n\n![${imageFileName}](${imagePath})`;
-      } else {
-        screenshotInfo += `${description}\n\n![${imageFileName}](${imagePath})\n\n`;
-      }
-    };
-
-    return screenshotInfo;
   }
 
   //Gets the list of used technologies as a string.
